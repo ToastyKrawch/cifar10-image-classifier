@@ -7,10 +7,10 @@ and makes a prediction about the image's class.
 
 import cv2 as cv
 import numpy as np
-from images import display_images, load_data
 from tensorflow.keras import models  # type: ignore
 
 from image_classifier.app import class_names
+from image_classifier.images import display_images, load_data
 
 
 def load_and_predict(model_path, image_path):
