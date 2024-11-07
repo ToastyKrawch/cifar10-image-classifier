@@ -4,13 +4,13 @@ model_creation.py: This script builds, trains, and evaluates a Convolutional Neu
 on the CIFAR-10 dataset, and saves the trained model as `image_classifier.keras`.
 """
 
-from images import display_images, load_data
-
 # Import necessary libraries
 from tensorflow.keras import (  # type: ignore #pylint: disable=import-error no-name-in-module
     layers,
     models,
 )
+
+from image_classifier.images import display_images, load_data
 
 
 def create_model():
