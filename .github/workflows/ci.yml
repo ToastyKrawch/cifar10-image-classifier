@@ -31,7 +31,7 @@ jobs:
       run: black --check .
 
     - name: Run Isort
-      run: isort --check-only .
+      run: isort --profile black --check-only .
 
     - name: Run Pylint
       run: |
