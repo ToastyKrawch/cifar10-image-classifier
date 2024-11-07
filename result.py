@@ -39,6 +39,8 @@ def load_and_predict(model_path, image_path):
     # Load and preprocess the image to make a prediction
 
     img = cv.imread(image_path)  # pylint: disable=no-member
+    if img is None:
+        raise ValueError("Cannot load image: Invalid or corrupted file")
 
     img = cv.resize(img, (32, 32))  # pylint: disable=no-member
     img = img / 255.00  # Normalize the pixel values to be between 0 and 1
