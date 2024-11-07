@@ -1,12 +1,12 @@
 # tests/test_app.py
-# pylint: disable=import-error no-name-in-module
+# pylint: disable=import-error no-name-in-module disable=no-member
 """
 Tests for the Flask application in `app.py`.
 Includes tests for app initialization, route handling, and image upload.
 """
 import pytest
 
-from app import app
+from image_classifier import app
 
 
 @pytest.fixture(name="client")

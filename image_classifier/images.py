@@ -5,9 +5,8 @@ images.py: This script displays images
 """
 
 import matplotlib.pyplot as plt
-from tensorflow.keras import datasets  # type: ignore
-
 from app import class_names
+from tensorflow.keras import datasets  # type: ignore
 
 
 # if __name__ == "__main__":

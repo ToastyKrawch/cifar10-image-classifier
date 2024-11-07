@@ -6,7 +6,7 @@ Includes tests for model structure and training on a small dataset.
 """
 import numpy as np  # type: ignore
 
-import model_creation
+from .. import model_creation
 
 
 def test_model_creation():

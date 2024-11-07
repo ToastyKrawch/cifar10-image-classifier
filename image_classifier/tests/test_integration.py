@@ -5,7 +5,7 @@ This file contains the happy and sad path tests we would like to include on comm
 import numpy as np
 import pytest
 
-from result import load_and_predict
+from image_classifier.result import load_and_predict
 
 
 def test_successful_prediction():

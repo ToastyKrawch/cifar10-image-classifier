@@ -4,8 +4,8 @@ Tests for the result handling in `result.py`.
 Includes tests for model loading and prediction.
 """
 
-from app import class_names
-from result import load_and_predict
+from image_classifier.app import class_names
+from image_classifier.result import load_and_predict
 
 
 def test_model_load_and_predict():
