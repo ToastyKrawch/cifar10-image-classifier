@@ -56,7 +56,7 @@ if __name__ == "__main__":
     display_images(training_images, training_labels)
 
 prediction = load_and_predict(
-    "model/image_classifier.keras", "static/uploads/uploaded_image.png"
+    "model/image_classifier.keras", "image_classifier/uploads/uploaded_image.png"
 )
 index = np.argmax(prediction)
 print(f"Prediction is: {class_names[index]}")

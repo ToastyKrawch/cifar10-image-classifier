@@ -23,7 +23,7 @@ def test_successful_prediction():
 def test_invalid_image_input():
     """Test that an invalid image input raises an appropriate error."""
     model_path = "model/image_classifier.keras"
-    invalid_image_path = "image_classifier/tests/invalid_image.txt"
+    invalid_image_path = "tests/invalid_image.txt"
     with pytest.raises(ValueError) as excinfo:
         load_and_predict(model_path, invalid_image_path)
 

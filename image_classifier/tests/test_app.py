@@ -29,7 +29,7 @@ def test_index_route(client):
 
 def test_image_upload(client):
     """Test if an image upload is handled correctly."""
-    with open("tests/test_image.png", "rb") as img:
+    with open("image_classifier/tests/test_image.png", "rb") as img:
         data = {"file": (img, "test_image.png")}
         response = client.post("/", content_type="multipart/form-data", data=data)
         assert response.status_code == 200

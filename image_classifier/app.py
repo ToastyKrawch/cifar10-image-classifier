@@ -62,7 +62,7 @@ def index():
         file = request.files["file"]
         if file:
             # Save the uploaded image
-            img_path = "static/uploads/uploaded_image.png"
+            img_path = "image_classifier/uploads/uploaded_image.png"
             file.save(img_path)
 
             # Preprocess the image
