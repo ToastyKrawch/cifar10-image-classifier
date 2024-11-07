@@ -1,27 +1,34 @@
-# pylint: disable=import-error, no-name-in-module
-
 """
 app.py: Flask web application for image classification using a pre-trained model
 on the CIFAR-10 dataset. The application allows users to upload an image and
 returns the predicted class.
 """
 
+# pylint: disable=import-error disable=no-name-in-module
+
 import cv2 as cv
 import numpy as np
 from flask import Flask, render_template, request
-from tensorflow.keras import models
-
-from common import class_names, load_cifar10_data
-
-# Load dataset
-(training_images, training_labels), (testing_images, testing_labels) = (
-    load_cifar10_data()
-)
+from tensorflow.keras import models  # type: ignore
 
 app = Flask(__name__)
 
 # Load the pre-trained model
 model = models.load_model("model/image_classifier.keras")
+
+# Class names for CIFAR-10
+class_names = [
+    "plane",
+    "car",
+    "bird",
+    "cat",
+    "deer",
+    "dog",
+    "frog",
+    "horse",
+    "ship",
+    "truck",
+]
 
 
 def preprocess_image(img_path):
@@ -64,7 +71,6 @@ def index():
             # Make a prediction
             prediction = model.predict(img)
             predicted_class_index = np.argmax(prediction)
-            result = class_names[predicted_class_index]
             result = class_names[predicted_class_index]
 
             return render_template("index.html", result=result, image_path=img_path)
