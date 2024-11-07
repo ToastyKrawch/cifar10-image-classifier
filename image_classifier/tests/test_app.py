@@ -6,7 +6,7 @@ Includes tests for app initialization, route handling, and image upload.
 """
 import pytest
 
-from image_classifier import app
+from image_classifier.app import app
 
 
 @pytest.fixture(name="client")
