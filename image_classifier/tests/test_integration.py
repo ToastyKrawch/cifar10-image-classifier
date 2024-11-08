@@ -10,7 +10,7 @@ from image_classifier.result import load_and_predict
 
 def test_successful_prediction():
     """Test that a valid image input results in a successful prediction."""
-    model_path = "model/image_classifier.keras"
+    model_path = "image_classifier/model/image_classifier.keras"
     image_path = "image_classifier/tests/test_image.png"
     prediction = load_and_predict(model_path, image_path)
     assert prediction is not None, "Prediction should not be None"
@@ -22,7 +22,7 @@ def test_successful_prediction():
 
 def test_invalid_image_input():
     """Test that an invalid image input raises an appropriate error."""
-    model_path = "model/image_classifier.keras"
+    model_path = "image_classifier/model/image_classifier.keras"
     invalid_image_path = "tests/invalid_image.txt"
     with pytest.raises(ValueError) as excinfo:
         load_and_predict(model_path, invalid_image_path)

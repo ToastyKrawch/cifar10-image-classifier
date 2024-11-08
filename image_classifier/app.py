@@ -14,7 +14,7 @@ from tensorflow.keras import models  # type: ignore
 app = Flask(__name__)
 
 # Load the pre-trained model
-model = models.load_model("model/image_classifier.keras")
+model = models.load_model("image_classifier/model/image_classifier.keras")
 
 # Class names for CIFAR-10
 class_names = [
