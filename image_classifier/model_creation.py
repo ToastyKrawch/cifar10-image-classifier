@@ -76,4 +76,4 @@ print(f"Loss: {loss}")
 print(f"Accuracy: {accuracy}")
 
 # Save the trained model
-model.save("model/image_classifier.keras")
+model.save("image_classifier/model/image_classifier.keras")
