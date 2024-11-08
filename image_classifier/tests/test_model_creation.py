@@ -26,8 +26,9 @@ def test_model_training():
     )
 
     # Dummy data
-    x_train = np.random.rand(10, 32, 32, 3)
-    y_train = np.random.randint(0, 10, (10, 1))
+    generator = np.random.default_rng(42)
+    x_train = generator.random((10, 32, 32, 3))
+    y_train = generator.integers(0, 10, (10, 1))
 
     history = model.fit(x_train, y_train, epochs=1, verbose=0)
     assert history is not None
