@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  lint-test:
+  lint-and-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,7 +19,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.10'  # Specify your Python version here
+        python-version: '3.10'
 
     - name: Install dependencies
       run: |
@@ -27,15 +27,27 @@ jobs:
         pip install pylint pytest black isort numpy opencv-python tensorflow matplotlib flask
         pip install -r requirements.txt
 
+    # Step 1: Run Black
     - name: Run Black
       run: black --check .
 
+    # Step 2: Run Isort
     - name: Run Isort
       run: isort --profile black --check-only .
 
+    # Step 3: Run Pylint
     - name: Run Pylint
       run: |
         find . -type f -name "*.py" | xargs pylint
 
-    - name: Run Pytest
-      run: pytest
+    # Step 4: Run Unit Tests
+    - name: Run Pytest - Unit Tests
+      run: pytest tests/unit
+
+    # Step 5: Run Happy/Sad Path Tests
+    - name: Run Pytest - Happy/Sad Path Tests
+      run: pytest tests/happy_sad
+
+    # Step 6: Run Acceptance Tests
+    - name: Run Pytest - Acceptance Tests
+      run: pytest tests/acceptance
