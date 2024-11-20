@@ -42,12 +42,12 @@ jobs:
 
     # Step 4: Run Unit Tests
     - name: Run Pytest - Unit Tests
-      run: pytest tests/unit
+      run: pytest image_classifier/tests/unit
 
     # Step 5: Run Happy/Sad Path Tests
     - name: Run Pytest - Happy/Sad Path Tests
-      run: pytest tests/happy_sad
+      run: pytest image_classifier/tests/happy_sad
 
     # Step 6: Run Acceptance Tests
     - name: Run Pytest - Acceptance Tests
-      run: pytest tests/acceptance
+      run: pytest image_classifier/tests/acceptance
