@@ -37,7 +37,6 @@ def load_and_predict(model_path, image_path):
     model = models.load_model(model_path)
 
     # Load and preprocess the image to make a prediction
-
     img = cv.imread(image_path)  # pylint: disable=no-member
     if img is None:
         raise ValueError("Cannot load image: Invalid or corrupted file")
@@ -55,9 +54,10 @@ def load_and_predict(model_path, image_path):
 if __name__ == "__main__":
     display_images(training_images, training_labels)
 
-prediction = load_and_predict(
-    "image_classifier/model/image_classifier.keras",
-    "image_classifier/uploads/uploaded_image.png",
-)
-index = np.argmax(prediction)
-print(f"Prediction is: {class_names[index]}")
+    prediction = load_and_predict(
+        "image_classifier/model/image_classifier.keras",
+        "image_classifier/uploads/uploaded_image.png",
+    )
+
+    index = np.argmax(prediction)
+    print(f"Prediction is: {class_names[index]}")
