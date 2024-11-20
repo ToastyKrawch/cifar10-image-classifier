@@ -4,7 +4,7 @@ on the CIFAR-10 dataset. The application allows users to upload an image and
 returns the predicted class.
 """
 
-# pylint: disable=import-error disable=no-name-in-module
+# pylint: disable=import-error no-name-in-module no-member
 
 import cv2 as cv
 import numpy as np
