@@ -9,45 +9,62 @@ on:
       - main
 
 jobs:
-  lint-and-tests:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pylint pytest black isort numpy opencv-python tensorflow matplotlib flask
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pylint pytest black isort numpy opencv-python tensorflow flask
 
-    # Step 1: Run Black
-    - name: Run Black
-      run: black --check .
+      - name: Run Pre-commit Hooks
+        run: pre-commit run --all-files
 
-    # Step 2: Run Isort
-    - name: Run Isort
-      run: isort --profile black --check-only .
+  test:
+    runs-on: ubuntu-latest
+    needs: build
 
-    # Step 3: Run Pylint
-    - name: Run Pylint
-      run: |
-        find . -type f -name "*.py" | xargs pylint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    # Step 4: Run Unit Tests
-    - name: Run Pytest - Unit Tests
-      run: pytest image_classifier/tests/unit
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
 
-    # Step 5: Run Happy/Sad Path Tests
-    - name: Run Pytest - Happy/Sad Path Tests
-      run: pytest image_classifier/tests/happy_sad
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest numpy opencv-python tensorflow flask
 
-    # Step 6: Run Acceptance Tests
-    - name: Run Pytest - Acceptance Tests
-      run: pytest image_classifier/tests/acceptance
+      - name: Run Tests
+        run: pytest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t toastykrawch/image-classifier:latest .
+          docker push toastykrawch/image-classifier:latest
