@@ -4,6 +4,12 @@ A Python project combining a convolutional neural network (CNN) trained on CIFAR
 
 **Status:** Academic project. Inference and training have not been re-verified as part of this documentation update.
 
+## Application screenshot
+
+The Flask interface accepts an uploaded image, runs it through the saved CIFAR-10 CNN model, and displays the predicted class.
+
+![CIFAR-10 image classifier web app](docs/images/quality3-demo.png)
+
 ## What it does
 
 - Trains a CNN to classify images into ten CIFAR-10 categories: airplane, automobile, bird, cat, deer, dog, frog, horse, ship, and truck.
