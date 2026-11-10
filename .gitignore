@@ -1,0 +1,15 @@
+# Python generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+
+# Local tooling
+.scannerwork/
+.coverage
+htmlcov/
+
+# Locally uploaded images
+image_classifier/static/uploads/

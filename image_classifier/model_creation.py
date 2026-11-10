@@ -48,32 +48,21 @@ def create_model():
     return model_creation
 
 
-(training_images, training_labels), (testing_images, testing_labels) = load_data()
+def train_and_save_model():
+    """Train a CNN on a CIFAR-10 subset and save it for inference."""
+    (training_images, training_labels), (testing_images, testing_labels) = load_data()
+    training_images = training_images[:20000]
+    training_labels = training_labels[:20000]
+    testing_images = testing_images[:4000]
+    testing_labels = testing_labels[:4000]
+    model = create_model()
+    model.compile(optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"])
+    model.fit(training_images, training_labels, epochs=10, validation_split=0.2)
+    loss, accuracy = model.evaluate(testing_images, testing_labels)
+    print(f"Loss: {loss}")
+    print(f"Accuracy: {accuracy}")
+    model.save("image_classifier/model/image_classifier.keras")
+
 
 if __name__ == "__main__":
-    display_images(training_images, training_labels)
-
-# Select a subset of the dataset for training and testing
-training_images = training_images[:20000]
-training_labels = training_labels[:20000]
-testing_images = testing_images[:4000]
-testing_labels = testing_labels[:4000]
-
-# Build a Convolutional Neural Network (CNN) model
-model = create_model()
-
-# Compile the model with optimizer, loss function, and evaluation metric
-model.compile(
-    optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"]
-)
-
-# Train the model on the training data
-model.fit(training_images, training_labels, epochs=10, validation_split=0.2)
-
-# Evaluate the model on the testing data
-loss, accuracy = model.evaluate(testing_images, testing_labels)
-print(f"Loss: {loss}")
-print(f"Accuracy: {accuracy}")
-
-# Save the trained model
-model.save("image_classifier/model/image_classifier.keras")
+    train_and_save_model()

@@ -9,8 +9,8 @@ import cv2 as cv
 import numpy as np
 from tensorflow.keras import models  # type: ignore
 
-from image_classifier.app import class_names
-from image_classifier.images import display_images, load_data
+from image_classifier.images import class_names
+
 
 
 def load_and_predict(model_path, image_path):
@@ -49,14 +49,11 @@ def load_and_predict(model_path, image_path):
     return model.predict(img)
 
 
-(training_images, training_labels), (testing_images, testing_labels) = load_data()
-
 if __name__ == "__main__":
-    display_images(training_images, training_labels)
 
     prediction = load_and_predict(
         "image_classifier/model/image_classifier.keras",
-        "image_classifier/uploads/uploaded_image.png",
+        "image_classifier/tests/test_image.png",
     )
 
     index = np.argmax(prediction)
