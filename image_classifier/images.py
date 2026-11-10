@@ -7,7 +7,8 @@ images.py: This script displays images
 import matplotlib.pyplot as plt
 from tensorflow.keras import datasets  # type: ignore
 
-from image_classifier.app import class_names
+CLASS_NAMES = ("plane", "car", "bird", "cat", "deer", "dog", "frog", "horse", "ship", "truck")
+class_names = CLASS_NAMES
 
 
 # if __name__ == "__main__":

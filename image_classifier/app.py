@@ -1,90 +1,51 @@
-"""
-app.py: Flask web application for image classification using a pre-trained model
-on the CIFAR-10 dataset. The application allows users to upload an image and
-returns the predicted class.
-"""
+"""Flask application for classifying uploaded images using a CIFAR-10 CNN."""
 
-# pylint: disable=import-error no-name-in-module no-member
+import base64
+from pathlib import Path
 
 import cv2 as cv
 import numpy as np
 import tensorflow as tf
 from flask import Flask, render_template, request
 
+from image_classifier.images import class_names
+
 app = Flask(__name__)
-
-# Load the pre-trained model
-model = tf.keras.models.load_model("image_classifier/model/image_classifier.keras")
-
-# Class names for CIFAR-10
-class_names = [
-    "plane",
-    "car",
-    "bird",
-    "cat",
-    "deer",
-    "dog",
-    "frog",
-    "horse",
-    "ship",
-    "truck",
-]
+MODEL_PATH = Path(__file__).resolve().parent / "model" / "image_classifier.keras"
+model = tf.keras.models.load_model(str(MODEL_PATH))
+MAX_UPLOAD_BYTES = 5 * 1024 * 1024
+app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_BYTES
 
 
-def preprocess_image(img_path):
-    """
-    Preprocess the input image by resizing it to 32x32, normalizing the pixel values,
-    and adding a batch dimension to make it compatible with the model.
-
-    Args:
-        img_path (str): Path to the image file.
-
-    Returns:
-        numpy.ndarray: Preprocessed image ready for prediction.
-
-    Raises:
-        ValueError: If the image cannot be loaded.
-    """
-    img = cv.imread(img_path)  # pylint: disable=no-member
-    if img is None:  # Check if the image was successfully loaded
+def preprocess_image(img_bytes):
+    """Decode and normalize an uploaded image without saving it to disk."""
+    if not img_bytes:
         raise ValueError("Cannot load image. The file may be invalid or unsupported.")
-    img = cv.resize(img, (32, 32))  # pylint: disable=no-member
-    img = img / 255.0
-    img = img[None, :]
-    return img
+    encoded = np.frombuffer(img_bytes, dtype=np.uint8)
+    image = cv.imdecode(encoded, cv.IMREAD_COLOR)
+    if image is None:
+        raise ValueError("Cannot load image. The file may be invalid or unsupported.")
+    image = cv.resize(image, (32, 32))
+    return np.expand_dims(image.astype(np.float32) / 255.0, axis=0)
 
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    """
-    Handle the main page of the web application. On POST request, the function processes
-    the uploaded image and returns the predicted class.
-
-    Returns:
-        str: Rendered HTML page with the classification result or an error message.
-    """
     if request.method == "POST":
-        # Handle the uploaded image
-        file = request.files["file"]
-        if file:
-            try:
-                # Save the uploaded image
-                img_path = "image_classifier/static/uploads/uploaded_image.png"
-                file.save(img_path)
-
-                # Preprocess the image
-                img = preprocess_image(img_path)
-
-                # Make a prediction
-                prediction = model.predict(img)
-                predicted_class_index = np.argmax(prediction)
-                result = class_names[predicted_class_index]
-
-                return render_template("index.html", result=result, image_path=img_path)
-            except ValueError as e:
-                # Handle invalid image errors
-                return str(e), 400  # Return a 400 Bad Request error
-    return render_template("index.html", result=None, image_path=None)
+        file = request.files.get("file")
+        if file is None or not file.filename:
+            return "Please choose an image to upload.", 400
+        try:
+            raw = file.read()
+            image = preprocess_image(raw)
+        except ValueError as exc:
+            return str(exc), 400
+        prediction = model.predict(image)
+        result = class_names[int(np.argmax(prediction))]
+        # Embed the validated image directly; no shared, persistent upload path.
+        image_base64 = base64.b64encode(raw).decode("ascii")
+        return render_template("index.html", result=result, image_base64=image_base64)
+    return render_template("index.html", result=None, image_base64=None)
 
 
 if __name__ == "__main__":
